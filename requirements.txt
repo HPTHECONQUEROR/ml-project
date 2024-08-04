@@ -1,4 +1,9 @@
-numpy
-pandas
+pandas==2.1.2
+numpy==1.26.4
 seaborn
--e.
+matplotlib
+scikit-learn
+catboost
+xgboost==2.1.0
+Flask
+# -e .
