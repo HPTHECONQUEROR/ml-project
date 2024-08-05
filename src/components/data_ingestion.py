@@ -2,13 +2,18 @@ from email import header
 from genericpath import exists
 from operator import index
 import os
-# from re import S
+from re import S
 import sys
 from dataclasses import dataclass
 import pandas as pd
 from sklearn.model_selection import train_test_split
+from xgboost import train
+from src.components import data_transformation
+from src.components.data_transformation import DataTransformation, DataTransformationConfig
 from src.exception import CustomException
 from src.logger import logging
+
+
 @dataclass
 class DataIngestionConfig:
     train_data_path: str=os.path.join('artifacts','train.csv')
@@ -29,7 +34,7 @@ class DataIngestion:
             '''
             Here we can call from mongoDB or any cloud DataBases
             '''
-            df=pd.read_csv('src/notebook/data/stud.csv')
+            df=pd.read_csv('/home/hp/Documents/Projects/ml-project/src/notebook/data/stud.csv')
             logging.info("Exported the dataset as Dataframe")
             
             os.makedirs(os.path.dirname(self.ingestion_config.train_data_path),exist_ok=True) #If folder is already there then exist_ok will keep the same folder instead of creating
@@ -53,4 +58,7 @@ class DataIngestion:
 
 if __name__ == "__main__":
     obj=DataIngestion()
-    obj.initiate_data_ingestion()
+    train_data,test_data=obj.initiate_data_ingestion()
+    
+    data_transformation = DataTransformation()
+    data_transformation.initiate_data_transformation(train_data,test_data)
